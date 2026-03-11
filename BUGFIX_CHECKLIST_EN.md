@@ -1,28 +1,28 @@
-# 代码修复清单 - 2026年3月11日
+# Code Fix Checklist - March 11, 2026
 
-本文档记录了所有需要修复的代码错误，分为3类：
-1. **必须修复** - 导致程序崩溃的错误
-2. **建议修复** - 提高代码质量的改进
-3. **新增文件** - 缺失的工具函数
+This document records all code errors that need to be fixed, categorized into 3 types:
+1. **Critical Fixes** - Errors causing program crashes
+2. **Recommended Fixes** - Code quality improvements
+3. **New Files** - Missing utility functions
 
 ---
 
-## 🔴 必须修复 (Critical Fixes)
+## 🔴 Critical Fixes
 
 ### 1. `+simSatSysClass/@simController/run.m`
 
-**问题**: 缺少关键初始化调用，导致 `VisibleSat`, `CoordiTri`, `scheduler` 未定义
+**Problem**: Missing critical initialization calls causing `VisibleSat`, `CoordiTri`, `scheduler` undefined
 
-**修复**: 在第15行后添加
+**Fix**: Add after line 15
 
 ```matlab
-% 在 self.DiscrInvesArea(); 之后添加 (约第15行)
+% After self.DiscrInvesArea(); add:
 self.getTriCoord();
 ```
 
-在第27行后添加 (约第27行):
+Add after line 27 (approximately):
 ```matlab
-% 在 getDiscrInNonWrap() 之后添加
+% After getDiscrInNonWrap() add:
 %% Calculate visible satellites
 self.calcuVisibleSat();
 if self.ifDebug == 1
@@ -30,12 +30,12 @@ if self.ifDebug == 1
 end
 ```
 
-在第344行修改 (创建scheduler对象):
+Modify line 344 (create scheduler object):
 ```matlab
-% 修改前:
+% Before:
 scheduler.getinterface(interface);
 
-% 修改后:
+% After:
 scheduler = simSatSysClass.schedulerObj();
 scheduler.getinterface(interface);
 ```
@@ -44,12 +44,12 @@ scheduler.getinterface(interface);
 
 ### 2. `+simSatSysClass/@simController/calcuVisibleSat.m`
 
-**问题**: 第216-267行有重复代码块和孤立括号
+**Problem**: Duplicate code block at lines 216-267
 
-**修复**: 删除第217-267行的所有重复代码
+**Fix**: Delete all duplicate code at lines 217-267
 
 ```matlab
-% 第216行之后应该直接是:
+% Line 216 should be followed directly by:
 end
 
 self.VisibleSat = tempVisibleSat;
@@ -59,20 +59,20 @@ self.VisibleSat = tempVisibleSat;
 
 ### 3. `+simSatSysClass/@simController/getNeighborSat.m`
 
-**问题**: 第213行有孤立括号 `)`
+**Problem**: Orphaned bracket `)` at line 213
 
-**修复**: 删除第213行
+**Fix**: Delete line 213
 
 ---
 
 ### 4. `+simSatSysClass/@simInterface/simInterface.m`
 
-**问题**: 第116-143行有重复的属性定义块
+**Problem**: Duplicate property definition block at lines 116-143
 
-**修复**: 删除第116-143行的重复代码块
+**Fix**: Delete duplicate code block at lines 116-143
 
 ```matlab
-% 第115行 end 之后应该直接是:
+% Line 115 'end' should be followed directly by:
 %% 
  methods
 ```
@@ -81,45 +81,45 @@ self.VisibleSat = tempVisibleSat;
 
 ### 5. `+simSatSysClass/@schedulerObj/getCurUsers.m`
 
-**问题**: 第29-38行和第109-119行有重复代码块
+**Problem**: Duplicate code blocks at lines 29-38 and 109-119
 
-**修复**: 
-- 删除第29-38行的重复循环
-- 删除第109-119行的重复elseif块
+**Fix**: 
+- Delete duplicate loop at lines 29-38
+- Delete duplicate elseif block at lines 109-119
 
 ---
 
 ### 6. `+simSatSysClass/@schedulerObj/generateBHST.m`
 
-**问题**: 第88行有孤立括号 `)`
+**Problem**: Orphaned bracket `)` at line 88
 
-**修复**: 删除第88行
+**Fix**: Delete line 88
 
 ---
 
 ### 7. `+methods/UsrsTraffic_Method.m`
 
-**问题**: 第72行有孤立括号 `)`
+**Problem**: Orphaned bracket `)` at line 72
 
-**修复**: 删除第72行
+**Fix**: Delete line 72
 
 ---
 
-## 🟡 建议修复 (Recommended Improvements)
+## 🟡 Recommended Improvements
 
 ### 8. `utils/generate_test_satellite_data.m`
 
-**问题**: 生成的卫星轨道不覆盖研究区域
+**Problem**: Generated satellite orbits don't cover the research area
 
-**修复**: 使用已修复的版本，确保卫星经过目标区域 [102-108°E, 26-30°N]
+**Fix**: Use the improved version that ensures satellites pass over target area [102-108°E, 26-30°N]
 
 ---
 
-## 🟢 新增文件 (New Files Required)
+## 🟢 New Files Required
 
-需要在项目根目录创建以下包和函数：
+Create the following packages and functions in the project root directory:
 
-### **+tools 包** (创建 `+tools` 文件夹)
+### **+tools Package** (create `+tools` folder)
 
 #### `+tools/LatLngCoordi2Length.m`
 ```matlab
@@ -247,7 +247,7 @@ end
 
 ---
 
-### **+antenna 包** (创建 `+antenna` 文件夹)
+### **+antenna Package** (create `+antenna` folder)
 
 #### `+antenna/getSatAntennaServG.m`
 ```matlab
@@ -331,19 +331,19 @@ end
 
 ---
 
-## 📝 提交到GitHub的步骤
+## 📝 Steps to Commit to GitHub
 
-### 1. 创建新分支
+### 1. Create New Branch
 ```bash
 git checkout -b bugfix/code-errors
 ```
 
-### 2. 应用修复
-按照上述清单逐个修复文件
+### 2. Apply Fixes
+Fix each file according to the checklist above
 
-### 3. 测试验证
+### 3. Test
 ```matlab
-% 运行测试
+% Run test
 cd('leo-bh-scheduling');
 addpath(genpath('.'));
 generate_test_satellite_data();
@@ -353,7 +353,7 @@ DataObj = controller.run();
 KPIs = calcuUserKPIs(DataObj);
 ```
 
-### 4. 提交更改
+### 4. Commit
 ```bash
 git add .
 git commit -m "Fix critical bugs and add missing utility functions
@@ -368,34 +368,34 @@ git commit -m "Fix critical bugs and add missing utility functions
 Fixes #[issue_number] (if applicable)"
 ```
 
-### 5. 推送并创建PR
+### 5. Push and Create PR
 ```bash
 git push origin bugfix/code-errors
 ```
 
-然后在GitHub上创建Pull Request
+Then create Pull Request on GitHub
 
 ---
 
-## 🔍 修复验证清单
+## 🔍 Fix Verification Checklist
 
-- [ ] 所有语法错误已修复
-- [ ] 测试脚本 `test_fix.m` 运行成功
-- [ ] 生成的卫星数据覆盖研究区域
-- [ ] 所有新增文件已添加到git
-- [ ] README更新（如有必要）
-- [ ] CHANGELOG更新（如有必要）
-
----
-
-## 💡 长期改进建议
-
-1. **添加单元测试**: 为工具函数添加测试用例
-2. **CI/CD**: 设置GitHub Actions自动测试
-3. **代码规范**: 使用MLint检查代码质量
-4. **文档**: 为所有函数添加完整的帮助文档
-5. **示例数据**: 提供真实的STK轨道数据样本
+- [ ] All syntax errors fixed
+- [ ] Test script `test_fix.m` runs successfully
+- [ ] Generated satellite data covers research area
+- [ ] All new files added to git
+- [ ] README updated (if necessary)
+- [ ] CHANGELOG updated (if necessary)
 
 ---
 
-生成日期: 2026年3月11日
+## 💡 Long-term Improvement Suggestions
+
+1. **Add unit tests**: Add test cases for utility functions
+2. **CI/CD**: Setup GitHub Actions for automatic testing
+3. **Code standards**: Use MLint to check code quality
+4. **Documentation**: Add complete help documentation for all functions
+5. **Example data**: Provide real STK orbit data samples
+
+---
+
+Generated: March 11, 2026
