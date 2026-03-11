@@ -4,14 +4,14 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Fixed-brightgreen.svg)](https://github.com/yuanhaobupt/leo-bh-scheduling/releases)
 
-> **⚠️ 重要更新 (2026-03-11): 所有代码错误已修复！**
+> **⚠️ Important Update (2026-03-11): All code errors have been fixed!**
 > 
-> 如果您之前克隆过此仓库，请立即更新：
+> If you cloned this repository before, please update immediately:
 > ```bash
 > git pull origin main
 > ```
 > 
-> 详见 [修复报告](FIXES_COMPLETED.md) 和 [更新日志](CHANGELOG.md)
+> See [Fix Report](FIXES_COMPLETED.md) and [Changelog](CHANGELOG.md) for details
 
 ---
 
