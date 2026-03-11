@@ -13,19 +13,26 @@ function DataObj = run(self)
  %% Discretize the input rectangular area range into equilateral triangles
  % Get center point and vertex coordinates of each equilateral triangle
  self.DiscrInvesArea();
+ self.getTriCoord();
  if self.ifDebug == 1
  fprintf('Area discretization completed\n');
  end
  
- %% Get sequence numbers of triangles in core investigation area (under wrapAround)
- if self.Config.ifWrapAround == 1
- self.getDiscrInNonWrap();
- if self.ifDebug == 1
- fprintf('Core area discretization completed\n');
- end
- end
- 
- %% CP type and slot configuration
+  %% Get sequence numbers of triangles in core investigation area (under wrapAround)
+  if self.Config.ifWrapAround == 1
+  self.getDiscrInNonWrap();
+  if self.ifDebug == 1
+  fprintf('Core area discretization completed\n');
+  end
+  end
+  
+  %% Calculate visible satellites
+  self.calcuVisibleSat();
+  if self.ifDebug == 1
+  fprintf('Visible satellite calculation completed\n');
+  end
+  
+  %% CP type and slot configuration
  % Normal CP type: one slot contains 14 OFDM symbols
  % Extended CP type: one slot contains 12 OFDM symbols
  % One Frame = 10 Subframes, one Subframe = 1ms
@@ -335,6 +342,7 @@ function DataObj = run(self)
  %% Beam hopping scheduling
  % Interface generation
  interface = simSatSysClass.simInterface(self);
+ scheduler = simSatSysClass.schedulerObj();
  scheduler.getinterface(interface); % Import interface class @simInterface parameter data into class @schedulerObj
  if self.ifDebug == 1
  fprintf('Snapshot %d data interface generation completed\n', IdxOfStep); 

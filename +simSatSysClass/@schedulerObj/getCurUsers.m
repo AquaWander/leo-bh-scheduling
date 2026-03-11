@@ -26,16 +26,6 @@ if sche == 1
         self.interface.SatObj(satId).servUsr(sche,1:length(temp)) = sort(userInLine(temp));
         self.interface.SatObj(satId).numOfusrs(sche) = length(temp);
     end
-    OrderOfServSatCur = self.interface.OrderOfServSatCur;
-    for satId = 1 : length(OrderOfServSatCur)
-        self.interface.SatObj(satId).servUsr = [];
-        self.interface.SatObj(satId).numOfusrs = [];
-
-        curSatId = OrderOfServSatCur(satId);
-        temp = find(user2sat(:,2) == curSatId);
-        self.interface.SatObj(satId).servUsr(sche,1:length(temp)) = sort(userInLine(temp));
-        self.interface.SatObj(satId).numOfusrs(sche) = length(temp);
-    end
 
 else
     if self.interface.Config.numOfSigbeam == 2
@@ -99,26 +89,6 @@ else
         self.interface.usersInLine(sche, 1 : length(userInLine)) = userInLine;
     
         % Re-obtain users for satobj
-        OrderOfServSatCur = self.interface.OrderOfServSatCur;
-        for satId = 1 : length(OrderOfServSatCur)
-            lastServ = self.interface.SatObj(satId).servUsr(sche - 1,:);
-            self.interface.SatObj(satId).servUsr(sche,1:length(lastServ)) = lastServ;
-            self.interface.SatObj(satId).numOfusrs(sche) = self.interface.SatObj(satId).numOfusrs(sche - 1);
-        end
-
-    end
-        OrderOfServSatCur = self.interface.OrderOfServSatCur;
-        for satId = 1 : length(OrderOfServSatCur)
-            curSatId = OrderOfServSatCur(satId);
-            temp = find(user2sat(:,2) == curSatId);
-            self.interface.SatObj(satId).servUsr(sche,1:length(temp)) = sort(userInLine(temp)); % servUsr stores OrderOfSelectedUsrs index
-            self.interface.SatObj(satId).numOfusrs(sche) = length(temp);
-        end
-    elseif self.interface.Config.numOfSigbeam == 0
-        % No new users, keep the same
-        userInLine = self.interface.usersInLine(sche - 1, :);
-        self.interface.usersInLine(sche, 1 : length(userInLine)) = userInLine;
-    
         OrderOfServSatCur = self.interface.OrderOfServSatCur;
         for satId = 1 : length(OrderOfServSatCur)
             lastServ = self.interface.SatObj(satId).servUsr(sche - 1,:);

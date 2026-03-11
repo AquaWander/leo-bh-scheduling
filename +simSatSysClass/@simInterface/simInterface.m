@@ -112,39 +112,7 @@ classdef simInterface < handle % Handle class
  tmpSat_2 % Stores "Imported beam footprint generation method 3" 
  tmpSat_3 % Stores "Imported beam footprint generation method 4"
  tmpSat_4 % Stores "Imported beam footprint generation method 5"
- end
- properties (Access = public)
- UsrsTraffic % matrix，formatas/is“NumOfAllUsrs × (scheInShot+1)”
- % UsrsTraffic(k, 1)as
- % UsrsTraffic(k, 2)
-
- UsrsTransPort % matrix，formatas/is“NumOfMethod × NumOfAllUsrs × scheInShot”
- % UsrsTransPort(idxOfMethod, k, p)as
- tmp_UsrsTransPort % matrix，formatas/is“NumOfAllUsrs × scheInShot”
- % UsrsTransPort(k, p)as
-
- tmpSat_0 % “beam positionGenerate1”
-
-
- % NumOfBeamFoot
- % beamfoot
-
-
- % BHST
- % BHST
- % BHST
- % BHST
- % BHST
- % Pt
- % Pt
- % Pt
- % Pt
- % Pt
- tmpSat_1 % “beam positionGenerate2”
- tmpSat_2 % “beam positionGenerate3” 
- tmpSat_3 % “beam positionGenerate4”
- tmpSat_4 % “beam positionGenerate5”
- end
+  end
 %% 
  methods
  function obj = simInterface(controller)

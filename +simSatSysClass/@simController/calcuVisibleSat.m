@@ -214,57 +214,6 @@ if flag == 0
     end
 
 end
-                        end
-                else
-                    tempVisibleSat(j,i,1) = 500;
-                    tempVisibleSat(j,i,2) = 500;
-                end
-            else
-                    tempVisibleSat(j,i,1) = 500;
-                    tempVisibleSat(j,i,2) = 500;
-            end
-        end 
-        % Supplementary calculation
-        for k = 2 : ceil(triNum/interval)
-            if(triDot(k-1,1)==0 && triDot(k,1)>0) || (triDot(k-1,1)>0 && triDot(k,1) > 0 && triDot(k-1,1) ~= triDot(k,1))% Supplementary judgment condition met
-                for j = 1 : satNum
-                    if self.SatPosition(j,i,1) ~= 500
-                        if tempSatNum(j,1) ~= 0 % Already found visible, no need to judge again
-                        else
-                            if SatPosition(j,i,1) <= bjLarge(1,1) && SatPosition(j,i,1) >= bjLarge(1,2) && SatPosition(j,i,2) >= bjLarge(2,1) && SatPosition(j,i,2) <= bjLarge(2,2)
-                            satRec = findSatRec(beamForward, beamLeft, SatPosition(j,i,2), SatPosition(j,i+1,2), SatPosition(j,i,1),SatPosition(j,i+1,1));% Get satellite coverage rectangle
-                                for m = (k-2)*interval +2  : (k-1)*interval
-                                    dotCoord = SeqDiscrArea(m,:);
-                                    in= calcuIN(satRec,dotCoord);
-                                    if in ==1
-                                        tempVisibleSat(j,i,1) = self.SatPosition(j,i,1);
-                                        tempVisibleSat(j,i,2) = self.SatPosition(j,i,2);
-                                        % If inside, store coordinates
-                                        break;
-                                    end                        
-                                end
-                            end
-                        end
-                    else
-                        tempVisibleSat(j,i,1) = 500;
-                        tempVisibleSat(j,i,2) = 500;
-                    end
-                end
-            end
-        end
-%         if ifDebug == 1
-%            fprintf('Calculate visible satellites for snapshot %f%%\n',i*100/(timeNum - 1));
-%         else
-% %             tmpStr = num2str(i*100/(timeNum - 1));
-% %             tmpstr_s = 'Calculate visible satellites for snapshot';
-% %             tmpStr = strcat(tmpStr, '%');
-% %             tmpStr = strcat(tmpstr_s, tmpStr);
-% %             app.MonitorPrint(2, tmpStr); 
-%         end
-        %fprintf('Calculate visible satellites for snapshot %f%%\n',((i-1)*satNum+j)*100/(satNum*(timeNum - 1)));
-    end
-
-end
 
 self.VisibleSat = tempVisibleSat;
 

@@ -80,9 +80,8 @@ function generateBHST(self, IdxOfStep, NumOfShot)
  eval(['self.interface.tmpSat_',num2str(k-1),'(idxOfSat).BHST_',num2str(p-1),' = ', ...
  'self.interface.tmpSat(idxOfSat).BHST;']); 
  end
- self.interface.UsrsTransPort(p, :, :) = self.interface.tmp_UsrsTransPort;
- self.interface.tmp_UsrsTransPort = zeros(self.interface.NumOfSelectedUsrs, self.interface.ScheInShot);
- end
+  self.interface.UsrsTransPort(p, :, :) = self.interface.tmp_UsrsTransPort;
+  self.interface.tmp_UsrsTransPort = zeros(self.interface.NumOfSelectedUsrs, self.interface.ScheInShot);
+  end
 end
 
-) 

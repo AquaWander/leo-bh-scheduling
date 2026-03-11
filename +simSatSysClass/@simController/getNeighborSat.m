@@ -209,5 +209,3 @@ end
 self.NeighborAdjaMatrix = adjaMatrix;
 end
 
-
-) 
