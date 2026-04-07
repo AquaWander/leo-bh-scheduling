@@ -16,6 +16,8 @@
 clear; clc; close all;
 
 %% Add paths
+projectRoot = fullfile(fileparts(mfilename('fullpath')), '..');
+cd(projectRoot);
 addpath(genpath('.'));
 
 %% Experiment Configuration

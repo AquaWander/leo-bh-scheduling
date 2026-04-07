@@ -86,6 +86,15 @@ leo-bh-scheduling/
 ├── +antenna/                   # Antenna pattern functions
 ├── +tools/                     # Coordinate and geometry utilities
 │
+├── experiments/                # Experiment scripts
+│   ├── run_TabuSearch.m        # Tabu Search baseline
+│   ├── run_DQN.m               # DQN baseline
+│   ├── run_ablation_SA.m       # SA ablation experiment
+│   ├── run_ablation_Ltabu.m    # Tabu tenure ablation
+│   ├── run_traffic_skew_experiment.m  # Traffic skew experiment
+│   ├── run_all_experiments.m   # Comprehensive runner
+│   └── run_visualization.m     # Batch visualization
+│
 ├── utils/                      # Helper utilities
 │   ├── calcuUserKPIs.m         # User-centric KPI calculation
 │   ├── generateTraffic.m       # Traffic demand generation
@@ -103,13 +112,6 @@ leo-bh-scheduling/
 │
 ├── setConfig.m                 # Configuration script
 ├── quick_start.m               # One-click verification
-├── run_TabuSearch.m            # Tabu Search baseline
-├── run_DQN.m                   # DQN baseline
-├── run_ablation_SA.m           # SA ablation experiment
-├── run_ablation_Ltabu.m        # Tabu tenure ablation
-├── run_traffic_skew_experiment.m  # Traffic skew experiment
-├── run_all_experiments.m       # Comprehensive runner
-├── run_visualization.m         # Batch visualization
 │
 └── README.md                   # This file
 ```
@@ -121,7 +123,7 @@ leo-bh-scheduling/
 Compare the proposed method (Tabu + SA) against Tabu-only baseline:
 
 ```matlab
-run('run_ablation_SA.m')
+run('experiments/run_ablation_SA.m')
 ```
 
 **Expected Results:**
@@ -135,7 +137,7 @@ run('run_ablation_SA.m')
 Compare adaptive vs. fixed tabu tenure:
 
 ```matlab
-run('run_ablation_Ltabu.m')
+run('experiments/run_ablation_Ltabu.m')
 ```
 
 **Expected Results:**
@@ -151,7 +153,7 @@ run('run_ablation_Ltabu.m')
 Test performance under different traffic distributions:
 
 ```matlab
-run('run_traffic_skew_experiment.m')
+run('experiments/run_traffic_skew_experiment.m')
 ```
 
 **Traffic Modes:**

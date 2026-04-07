@@ -10,6 +10,9 @@
 
 clear; clc; close all;
 
+% Ensure project root is on the path
+projectRoot = fullfile(fileparts(mfilename('fullpath')), '..');
+cd(projectRoot);
 addpath(genpath('.'));
 
 fprintf('========================================\n');
