@@ -11,7 +11,7 @@
 > git pull origin main
 > ```
 > 
-> See [Fix Report](FIXES_COMPLETED.md) and [Changelog](CHANGELOG.md) for details
+> See [Changelog](CHANGELOG.md) for details
 
 ---
 
@@ -42,7 +42,7 @@ This project addresses the beam-hopping (BH) scheduling problem in LEO satellite
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/leo-bh-scheduling.git
+git clone https://github.com/yuanhaobupt/leo-bh-scheduling.git
 
 # Navigate to the project directory
 cd leo-bh-scheduling

@@ -1,8 +1,8 @@
-% quick_start.m - 最简单的快速开始脚本
-% 运行此脚本以快速验证代码是否正常工作
+% quick_start.m - Quick Start Script
+% Run this script to verify the code is working correctly
 %
-% 使用方法:
-%   cd('C:\Users\windows\Desktop\leo-bh-scheduling');
+% Usage:
+%   cd('path/to/leo-bh-scheduling');
 %   quick_start;
 
 fprintf('\n');
@@ -95,7 +95,7 @@ catch ME
     fprintf('🔍 故障排除:\n');
     fprintf('   1. 确保运行了 git pull origin main\n');
     fprintf('   2. 删除 5400.mat 并重新运行 generate_test_satellite_data()\n');
-    fprintf('   3. 查看 FIXES_COMPLETED.md 了解已知修复\n');
+    fprintf('   3. 查看 CHANGELOG.md 了解已知修复\n');
     fprintf('   4. 在 GitHub 上提交 issue\n\n');
     
     rethrow(ME);
