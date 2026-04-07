@@ -7,6 +7,7 @@
 *.slx
 *.mdl
 *.p
+*.fig
 
 # Results (large files)
 results/*.mat
