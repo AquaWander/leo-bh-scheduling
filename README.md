@@ -36,7 +36,7 @@ This project addresses the beam-hopping (BH) scheduling problem in LEO satellite
 - Required toolboxes:
   - Communications Toolbox
   - Optimization Toolbox (optional, for baseline comparison)
-- **Satellite Orbit Data**: This project requires satellite orbit data files (`5400.mat` or `1800.mat`) containing position information. See [DATA_REQUIREMENT.md](DATA_REQUIREMENT.md) for details on how to obtain or generate these files.
+- **Satellite Orbit Data**: This project requires satellite orbit data files (`5400.mat` or `1800.mat`) containing position information. Run `generate_test_satellite_data()` to generate sample data.
 
 ### Installation
 
@@ -75,7 +75,7 @@ leo-bh-scheduling/
 │   ├── BHST_MY_SA.m            # Tabu Search with SA
 │   ├── BHST_greedy.m           # Greedy baseline
 │   ├── BHST_DQN.m              # DQN baseline
-│   └── Evolution.m             # Genetic Algorithm baseline
+│   └── ...
 │
 ├── +simSatSysClass/            # Simulation framework
 │   ├── @simController/         # Main controller
@@ -83,22 +83,33 @@ leo-bh-scheduling/
 │   ├── @dataObj/               # Result storage
 │   └── +tools/                 # Utility functions
 │
+├── +antenna/                   # Antenna pattern functions
+├── +tools/                     # Coordinate and geometry utilities
+│
 ├── utils/                      # Helper utilities
 │   ├── calcuUserKPIs.m         # User-centric KPI calculation
 │   ├── generateTraffic.m       # Traffic demand generation
+│   ├── generate_test_satellite_data.m  # Synthetic orbit data
+│   ├── analyze_existing_results.m      # Result analysis
 │   └── perform_statistics.m    # Statistical analysis
 │
 ├── visualize/                  # Visualization tools
 │   ├── plot_SINR_CDF.m
 │   ├── plot_Throughput_Comparison.m
-│   └── plot_ablation_results.m
+│   ├── plot_ablation_results.m
+│   └── ...
 │
 ├── results/                    # Experiment results (git-ignored)
 │
 ├── setConfig.m                 # Configuration script
-├── run_ablation_SA_v3.m        # SA ablation experiment
+├── quick_start.m               # One-click verification
+├── run_TabuSearch.m            # Tabu Search baseline
+├── run_DQN.m                   # DQN baseline
+├── run_ablation_SA.m           # SA ablation experiment
 ├── run_ablation_Ltabu.m        # Tabu tenure ablation
 ├── run_traffic_skew_experiment.m  # Traffic skew experiment
+├── run_all_experiments.m       # Comprehensive runner
+├── run_visualization.m         # Batch visualization
 │
 └── README.md                   # This file
 ```
