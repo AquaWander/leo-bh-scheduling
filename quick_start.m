@@ -7,96 +7,96 @@
 
 fprintf('\n');
 fprintf('╔══════════════════════════════════════════════════════════╗\n');
-fprintf('║     LEO卫星波束调度 - 快速测试                          ║\n');
+fprintf('║     LEO Beam-Hopping Scheduling - Quick Test            ║\n');
 fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
-%% 1. 添加路径
-fprintf('[1/4] 添加路径...\n');
+%% 1. Add paths
+fprintf('[1/4] Adding paths...\n');
 addpath(genpath('.'));
-fprintf('     ✓ 完成\n\n');
+fprintf('     Done\n\n');
 
-%% 2. 检查卫星数据
-fprintf('[2/4] 检查卫星轨道数据...\n');
+%% 2. Check satellite data
+fprintf('[2/4] Checking satellite orbit data...\n');
 if ~exist('5400.mat', 'file')
-    fprintf('     卫星数据不存在，正在生成...\n');
+    fprintf('     Satellite data not found, generating...\n');
     generate_test_satellite_data();
 else
-    fprintf('     ✓ 卫星数据已存在\n');
+    fprintf('     Satellite data found\n');
 end
 fprintf('\n');
 
-%% 3. 加载配置
-fprintf('[3/4] 加载配置...\n');
+%% 3. Load configuration
+fprintf('[3/4] Loading configuration...\n');
 setConfig;
-fprintf('     配置信息:\n');
-fprintf('       - 卫星数量: %d\n', 54);
-fprintf('       - 用户数量: %d\n', Config.meanUsrsNum);
-fprintf('       - 波束数量: %d\n', Config.numOfServbeam);
-fprintf('       - 研究区域: [%.1f°-%.1f°E, %.1f°-%.1f°N]\n', ...
+fprintf('     Configuration:\n');
+fprintf('       - Satellites: %d\n', 54);
+fprintf('       - Users: %d\n', Config.meanUsrsNum);
+fprintf('       - Beams: %d\n', Config.numOfServbeam);
+fprintf('       - Study area: [%.1f-%.1fE, %.1f-%.1fN]\n', ...
     Config.rangeOfInves(1,1), Config.rangeOfInves(1,2), ...
     Config.rangeOfInves(2,1), Config.rangeOfInves(2,2));
-fprintf('     ✓ 完成\n\n');
+fprintf('     Done\n\n');
 
-%% 4. 运行快速测试
-fprintf('[4/4] 运行仿真测试...\n');
-fprintf('     这可能需要几秒钟...\n\n');
+%% 4. Run quick test
+fprintf('[4/4] Running simulation test...\n');
+fprintf('     This may take a few seconds...\n\n');
 
 try
     tic;
-    
-    % 创建控制器并运行
+
+    % Create controller and run
     controller = simSatSysClass.simController(Config, 1, 1, 0);
     DataObj = controller.run();
-    
-    % 计算KPI
+
+    % Calculate KPIs
     KPIs = calcuUserKPIs(DataObj);
-    
+
     elapsed = toc;
-    
-    %% 显示结果
+
+    %% Display results
     fprintf('\n');
     fprintf('╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║                  测试成功！                              ║\n');
+    fprintf('║                  Test Passed!                            ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
-    
-    fprintf('📊 性能指标:\n');
+
+    fprintf('Performance Metrics:\n');
     fprintf('┌─────────────────────────────────────────┐\n');
-    fprintf('│ 指标                    │ 值            │\n');
+    fprintf('│ Metric                  │ Value         │\n');
     fprintf('├─────────────────────────┼────────────────┤\n');
-    fprintf('│ 平均 SINR              │ %6.2f dB     │\n', KPIs.avg_sinr);
-    fprintf('│ 中位数 SINR            │ %6.2f dB     │\n', KPIs.median_sinr);
-    fprintf('│ SINR p90               │ %6.2f dB     │\n', KPIs.p90_sinr);
-    fprintf('│ 中断率 (<0 dB)         │ %6.2f %%      │\n', KPIs.outage_rate*100);
+    fprintf('│ Avg SINR                │ %6.2f dB     │\n', KPIs.avg_sinr);
+    fprintf('│ Median SINR             │ %6.2f dB     │\n', KPIs.median_sinr);
+    fprintf('│ SINR p90                │ %6.2f dB     │\n', KPIs.p90_sinr);
+    fprintf('│ Outage Rate (<0 dB)     │ %6.2f %%      │\n', KPIs.outage_rate*100);
     fprintf('├─────────────────────────┼────────────────┤\n');
-    fprintf('│ 平均延迟               │ %6.2f ms     │\n', KPIs.avg_delay);
-    fprintf('│ Jain 公平性指数        │ %6.4f        │\n', KPIs.fairness_index);
-    fprintf('│ 平均满意度             │ %6.2f %%      │\n', KPIs.avg_satisfaction*100);
+    fprintf('│ Avg Delay               │ %6.2f ms     │\n', KPIs.avg_delay);
+    fprintf('│ Jain Fairness Index     │ %6.4f        │\n', KPIs.fairness_index);
+    fprintf('│ Avg Satisfaction        │ %6.2f %%      │\n', KPIs.avg_satisfaction*100);
     fprintf('└─────────────────────────────────────────┘\n\n');
-    
-    fprintf('⏱️  运行时间: %.2f 秒\n\n', elapsed);
-    
-    fprintf('✅ 所有测试通过！代码运行正常。\n\n');
-    
-    fprintf('📖 下一步:\n');
-    fprintf('   1. 查看 setConfig.m 修改参数\n');
-    fprintf('   2. 运行 run_TabuSearch.m 进行完整实验\n');
-    fprintf('   3. 查看 visualize/ 文件夹进行结果可视化\n');
-    fprintf('   4. 阅读 README.md 了解更多功能\n\n');
-    
+
+    fprintf('Runtime: %.2f seconds\n\n', elapsed);
+
+    fprintf('All tests passed! Code is working correctly.\n\n');
+
+    fprintf('Next Steps:\n');
+    fprintf('   1. Edit setConfig.m to modify parameters\n');
+    fprintf('   2. Run run_TabuSearch.m for full experiments\n');
+    fprintf('   3. Check visualize/ for result plots\n');
+    fprintf('   4. Read README.md for more details\n\n');
+
 catch ME
     fprintf('\n');
     fprintf('╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║                  测试失败！                              ║\n');
+    fprintf('║                  Test Failed!                            ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
-    
-    fprintf('❌ 错误信息: %s\n', ME.message);
-    fprintf('   位置: %s (第 %d 行)\n\n', ME.stack(1).name, ME.stack(1).line);
-    
-    fprintf('🔍 故障排除:\n');
-    fprintf('   1. 确保运行了 git pull origin main\n');
-    fprintf('   2. 删除 5400.mat 并重新运行 generate_test_satellite_data()\n');
-    fprintf('   3. 查看 CHANGELOG.md 了解已知修复\n');
-    fprintf('   4. 在 GitHub 上提交 issue\n\n');
-    
+
+    fprintf('Error: %s\n', ME.message);
+    fprintf('   Location: %s (line %d)\n\n', ME.stack(1).name, ME.stack(1).line);
+
+    fprintf('Troubleshooting:\n');
+    fprintf('   1. Make sure you ran: git pull origin main\n');
+    fprintf('   2. Delete 5400.mat and re-run generate_test_satellite_data()\n');
+    fprintf('   3. Check CHANGELOG.md for known fixes\n');
+    fprintf('   4. Submit an issue on GitHub\n\n');
+
     rethrow(ME);
 end
