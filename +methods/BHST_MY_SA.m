@@ -65,6 +65,9 @@ lightTime = interface.timeInSlot;% Beam illumination time (slot length) in secon
 % Record convergence trace (for ablation experiments)
 convergence_trace = cell(1, 0);  % Use cell array to store convergence trace for each time slot
 
+% Track transported traffic per user per scheduling period
+TransportedTraffic_all = zeros(interface.NumOfSelectedUsrs, sche);
+
 %% Traverse scheduling periods
 for idx = 1 : sche
     % Current scheduled users
@@ -314,14 +317,34 @@ for idx = 1 : sche
             % Record convergence trace (use cell array to avoid dimension mismatch)
             convergence_trace{slotIdx} = trace_this_slot;
             
-            % Update traffic
-            for cc = 1 : NumOfBeam
+            % Update traffic and record transported traffic per user
+            for cc = 1 : length(bestsofar)
                 curFoot = bestsofar(cc);
+                beforeServ = max(serv_need(curFoot), 0);
                 leftServ = calcuServ(satIdx, scheIdx, slotIdx, bestsofar, curFoot, interface, serv_need, curSatPos, curSatNextPos, heightOfsat);
                 if length(leftServ) == 1
+                    actualServed = max(beforeServ - leftServ, 0);
                     serv_need(curFoot) = leftServ;
+                    % Distribute to users in this beam proportionally to remaining demand
+                    orderOfUsrs = interface.tmpSat(satIdx).beamfoot(idx, curFoot).usrs;
+                    [~, interUsers] = intersect(interface.OrderOfSelectedUsrs, orderOfUsrs);
+                    if ~isempty(interUsers)
+                        userDemands = max(requestServAll(interUsers), 0);
+                        userDemands = userDemands(:);
+                        alreadyServed = TransportedTraffic_all(interUsers, idx);
+                        alreadyServed = alreadyServed(:);
+                        remainingDemand = max(userDemands - alreadyServed, 0);
+                        totalRemaining = sum(remainingDemand);
+                        if totalRemaining > 0
+                            distributeNow = min(actualServed, totalRemaining);
+                            for u = 1 : length(interUsers)
+                                TransportedTraffic_all(interUsers(u), idx) = TransportedTraffic_all(interUsers(u), idx) + ...
+                                    distributeNow * (remainingDemand(u) / totalRemaining);
+                            end
+                        end
+                    end
                 end
-            end  
+            end
             fprintf('Satellite %d BHST formed %.1f%%\n',satIdx,slotIdx * 100 /bhLength);
         end
         %% Store data
@@ -329,6 +352,9 @@ for idx = 1 : sche
         fprintf('Scheduling %d Satellite %d BHST formed\n', idx, satIdx); 
     end
 end
+
+% Write transported traffic to interface
+interface.tmp_UsrsTransPort = TransportedTraffic_all;
 
 % Note: Convergence trace cannot be saved to interface (class property limitations)
 % To analyze convergence trace, add global variables externally or modify simInterface class
@@ -430,7 +456,7 @@ SINRofBF = curSINR / length(orderOfUsrs);
 % Calculate how much these beam positions transmitted
 given = Band * log2(1+SINRofBF)*lightTime;
 footIdx = find(lightFoot == curFoot);
-leftServ = serv_need(footIdx) - given;
+leftServ = serv_need(curFoot) - given;
 
 end
 

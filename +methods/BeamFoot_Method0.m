@@ -44,7 +44,7 @@ for i = 1 : NumOfSat
  satCurPos = interface.SatObj(i).position; % Current satellite sub-satellite point coordinates
  satCurnextPos = interface.SatObj(i).nextpos; % Next step coordinates of current satellite sub-satellite point
  % Get current satellite user information
- numOfUsrs = interface.SatObj(i).numOfusrs(idx); 
+ numOfUsrs = interface.SatObj(i).numOfusrs(idx);
  UsrsOrder = interface.SatObj(i).servUsr(idx,:); % Satellite serving user IDs
 
  if numOfUsrs == 0

@@ -27,6 +27,9 @@ Num_scheme = interface.ScheInShot;  % Number of scheduling periods per snapshot
 bhLength = interface.SlotInSche; % Length of one beam hopping scheduling
 lightTime = interface.timeInSlot;% Beam illumination time (slot duration), unit is s
 
+% Track transported traffic per user per scheduling period
+TransportedTraffic_all = zeros(interface.NumOfSelectedUsrs, sche);
+
 %% Traverse by scheduling period
 for idx = 1 : sche
 % Current scheduled users
@@ -140,18 +143,34 @@ end
 %             P = Pt_sat/NumOfBeam;% Power allocated to each beam position (equal distribution)
             for cc = 1 : NumOfBeam
                 curFoot = curBeam(cc);
+                beforeServ = max(serv_need(curFoot), 0);
                 leftServ = calcuServ(satIdx, scheIdx, slotIdx, curBeam, curFoot, interface, serv_need, curSatPos, curSatNextPos, heightOfsat);
+                actualServed = max(beforeServ - leftServ, 0);
                 serv_need(curFoot) = leftServ;
-            end  
+                % Distribute to users in this beam proportionally to demand
+                orderOfUsrs = interface.tmpSat(satIdx).beamfoot(idx, curFoot).usrs;
+                [~, interUsers] = intersect(interface.OrderOfSelectedUsrs, orderOfUsrs);
+                userDemands = requestServAll(interUsers);
+                totalDemand = sum(max(userDemands, 0));
+                if totalDemand > 0
+                    for u = 1 : length(interUsers)
+                        TransportedTraffic_all(interUsers(u), idx) = TransportedTraffic_all(interUsers(u), idx) + ...
+                            actualServed * (max(userDemands(u), 0) / totalDemand);
+                    end
+                end
+            end
             fprintf('Satellite %d BHST formed %.1f%%\n',satIdx,slotIdx * 100 /bhLength);
         end
             %% Data storage below
 %         tmpBHST = zeros();
         interface.tmpSat(satIdx).BHST(:,((idx-1)*bhLength+1):(idx*bhLength)) = BHST(:,:);
-        fprintf('Scheduling %d Satellite %d BHST formed\n', idx, satIdx); 
+        fprintf('Scheduling %d Satellite %d BHST formed\n', idx, satIdx);
 
     end
 end
+
+% Write transported traffic to interface
+interface.tmp_UsrsTransPort = TransportedTraffic_all;
 
 end
 
@@ -255,7 +274,7 @@ end
 % Calculate how much these beam positions transmitted
 given = Band * log2(1+SINRofBF)*lightTime;
 footIdx = find(lightFoot == curFoot);
-leftServ = serv_need(footIdx) - given;
+leftServ = serv_need(curFoot) - given;
 
 end
 %% Calculate fitness value

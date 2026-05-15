@@ -64,21 +64,27 @@ function generateBHST(self, IdxOfStep, NumOfShot)
  p = 1;
  
  % based on
- if enable_SA
+ use_GA = false;
+ try
+     if isfield(self.interface.Config, 'algorithm') && strcmp(self.interface.Config.algorithm, 'GA')
+         use_GA = true;
+     end
+ catch
+ end
+
+ if use_GA
+     methods.BHST_GA(self.interface);
+ elseif enable_SA
  % using
  methods.BHST_MY_SA(self.interface, enable_SA, L_tabu_mode, fixed_L_tabu);
  else
  % using
  methods.BHST_MY(self.interface);
  end
- 
- % Alternative algorithms (commented out)
- % methods.BHST_greedy(self.interface); % Greedy
- % methods.BHST_greedyAndDist(self.interface); % Greedy + isolation
 
  for idxOfSat = 1 : length(self.interface.OrderOfServSatCur)
  eval(['self.interface.tmpSat_',num2str(k-1),'(idxOfSat).BHST_',num2str(p-1),' = ', ...
- 'self.interface.tmpSat(idxOfSat).BHST;']); 
+ 'self.interface.tmpSat(idxOfSat).BHST;']);
  end
   self.interface.UsrsTransPort(p, :, :) = self.interface.tmp_UsrsTransPort;
   self.interface.tmp_UsrsTransPort = zeros(self.interface.NumOfSelectedUsrs, self.interface.ScheInShot);

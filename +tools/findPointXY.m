@@ -1,26 +1,38 @@
-function [x, y, z] = findPointXY(interface, lat, lon)
-% FINDPOINTXY Convert latitude/longitude to Cartesian coordinates
+function [row, col, ifUp] = findPointXY(obj, lat, lon)
+% FINDPOINTXY Find discretization grid indices for given lat/lon
 %
 % Inputs:
-%   interface - Interface object containing configuration
-%   lat       - Latitude (degrees)
-%   lon       - Longitude (degrees)
+%   obj - Interface or controller object with SeqDiscrArea property
+%   lat - Latitude (degrees)
+%   lon - Longitude (degrees)
 %
 % Outputs:
-%   x, y, z - Cartesian coordinates (meters)
+%   row  - Row index in discretization grid (1-based)
+%   col  - Column index in discretization grid (1-based)
+%   ifUp - Triangle orientation (0=down, 1=up)
 %
-% This converts geographic coordinates to Earth-Centered Earth-Fixed (ECEF)
-% Cartesian coordinates
+% Returns (0, 0, 0) if point is outside the grid
 
-R_earth = 6371.393e3;  % Earth radius in meters
+seqArea = obj.SeqDiscrArea;
 
-% Convert to radians
-lat_rad = lat * pi / 180;
-lon_rad = lon * pi / 180;
+% Get rowNum from obj
+try
+    rowNum = obj.rowNum;
+catch
+    rowNum = size(obj.DiscrArea, 1);
+end
 
-% ECEF coordinates (assuming spherical Earth)
-x = R_earth * cos(lat_rad) * cos(lon_rad);
-y = R_earth * cos(lat_rad) * sin(lon_rad);
-z = R_earth * sin(lat_rad);
+% Find nearest triangle center
+% SeqDiscrArea: col1=longitude, col2=latitude
+dlat = seqArea(:,2) - lat;
+dlon = seqArea(:,1) - lon;
+[~, idx] = min(dlat.^2 + dlon.^2);
+
+% Convert linear index to (row, col) using same formula as ij2Seq
+row = mod(idx - 1, rowNum) + 1;
+col = floor((idx - 1) / rowNum) + 1;
+
+% Triangle orientation: odd columns = up, even columns = down
+ifUp = mod(col, 2);
 
 end

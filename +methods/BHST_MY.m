@@ -374,7 +374,7 @@ end
 % Calculate how much these beam positions transmitted
 given = Band * log2(1+SINRofBF)*lightTime;
 footIdx = find(lightFoot == curFoot);
-leftServ = serv_need(footIdx) - given;
+leftServ = serv_need(curFoot) - given;
 
 end
 %% Calculate fitness value
